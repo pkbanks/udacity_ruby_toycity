@@ -14,28 +14,33 @@ puts "| .__/|_|  \\___/ \\__,_|\\__,_|\\___|\\__|___/"
 puts "| |                                       "
 puts "|_|                                       "
 
+break_theme = '********************'
 
 # For each product in the data set:
 products_hash['items'].each do | toy |
-  puts '------------'
-# Print the name of the toy
+  
+  # Print the name of the toy
   puts toy['title']
+  puts break_theme
   # Print the retail price of the toy
   retail_price = toy['full-price'].to_f
-  puts "Price: #{sprintf('%.2f', retail_price)}"
+  puts "Retail Price: $#{sprintf('%.2f', retail_price)}"
   # Calculate and print the total number of purchases
-  puts "Number of purchases: #{toy['purchases'].length}"
+  puts "Total Purchases: #{toy['purchases'].length}"
   # Calculate and print the total amount of sales
   total_sales = 0
   toy['purchases'].each do |purchase|
     total_sales += purchase['price']
   end
-  puts "Total Sales: #{sprintf('%.2f', total_sales)}"
+  puts "Total Sales: $#{sprintf('%.2f', total_sales)}"
   # Calculate and print the average price the toy sold for
   average_price = total_sales/toy['purchases'].length
-  puts "Average price: #{sprintf('%.2f', average_price)}"
+  puts "Average Price: $#{sprintf('%.2f', average_price)}"
   # Calculate and print the average discount (% or $) based off the average sales price
-  puts "Average discount: #{sprintf('%.2f',retail_price - average_price)}"
+  puts "Average Discount: $#{sprintf('%.2f',retail_price - average_price)}"
+  puts "Average Discount Percentage: #{sprintf('%.2f',((retail_price - average_price)/retail_price)*100)}%"
+  puts break_theme
+  puts ''
 end
   
 
@@ -72,33 +77,31 @@ products_hash['items'].each do |toy|
     brand_data[brand] = {}
     brand_data[brand][:brand_name] = brand
     brand_data[brand][:toy_count] = 0
+    brand_data[brand][:toy_stock] = 0
     brand_data[brand][:cumulative_price] = 0  # we will use this to calculate the average price
     brand_data[brand][:total_revenue] = 0
   end
   
   # update our data for the toy
   brand_data[brand][:toy_count] += 1
+  brand_data[brand][:toy_stock] += toy['stock']
   brand_data[brand][:cumulative_price] += toy['full-price'].to_f
   toy['purchases'].each do | purchase |
     brand_data[brand][:total_revenue] += purchase['price'].to_f
   end
 end
 
-puts '------------'
-
 # For each brand in the data set:
 brand_data.each do | brand, data |
   # Print the name of the brand
-  puts data[:brand_name]
+  puts data[:brand_name].upcase
+  puts break_theme
   # Count and print the number of the brand's toys we stock
-  puts "Number of toys: #{data[:toy_count]}"
+  puts "Number of Products: #{data[:toy_stock]}"
   # Calculate and print the average price of the brand's toys
-  puts "Average price: #{sprintf('%.2f', data[:cumulative_price] / data[:toy_count])}"
+  puts "Average price: $#{sprintf('%.2f', data[:cumulative_price] / data[:toy_count])}"
   # Calculate and print the total revenue of all the brand's toy sales combined
-  puts "Total revenue: #{sprintf('%.2f', data[:total_revenue])}"
-  puts '------------'
+  puts "Total revenue: $#{sprintf('%.2f', data[:total_revenue])}"
+  puts break_theme
+  puts ''
 end
-
-puts brand_datas  
-  
-  
